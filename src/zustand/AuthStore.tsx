@@ -12,7 +12,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   async setUser(user) {
     try {
-      await AsyncStorage.setItem("happy-thrift-user", user);
+      await AsyncStorage.setItem("dietary-app-user", user);
       set({ user });
     } catch (error) {
       console.error("Error saving user to AsyncStorage:", error);
@@ -21,7 +21,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   async clearUser() {
     try {
-      await AsyncStorage.removeItem("happy-thrift-user");
+      await AsyncStorage.removeItem("dietary-app-user");
       set({ user: null });
     } catch (error) {
       console.error("Error removing user from AsyncStorage:", error);
@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   async init() {
     try {
-      const user = await AsyncStorage.getItem("happy-thrift-user");
+      const user = await AsyncStorage.getItem("dietary-app-user");
       if (user) {
         set({ user });
       }

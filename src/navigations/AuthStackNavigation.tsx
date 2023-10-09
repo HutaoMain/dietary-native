@@ -17,7 +17,13 @@ const AuthStackNavigation = () => {
       <AuthStack.Screen
         name="Register"
         component={Register}
-        options={{ headerShown: false }}
+        options={{
+          headerStyle: {
+            backgroundColor: "white",
+          },
+          title: "",
+          headerShadowVisible: false,
+        }}
       />
     </AuthStack.Navigator>
   );

@@ -5,37 +5,28 @@ import {
   TextInput,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackNavigationType } from "../types/Types";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import moment from "moment";
+import { LinearGradient } from "expo-linear-gradient";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "../firebase/FirebaseConfig";
 
 const Register = () => {
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [date, setDate] = useState<Date>(new Date());
+
   const [loading, setLoading] = useState<boolean>(false);
-
-  const onChangeSelectedDate = (selectedDate: any) => {
-    const formattedDate = new Date(selectedDate);
-    setShowDatePicker(false);
-    if (formattedDate) {
-      setDate(formattedDate);
-    }
-  };
-
-  const toggleDate = () => {
-    setShowDatePicker(true);
-  };
 
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthStackNavigationType>>();
+
+  const auth = FIREBASE_AUTH;
 
   const handleRegistration = async () => {
     setLoading(true);
@@ -43,6 +34,8 @@ const Register = () => {
       if (password !== confirmPassword) {
         Alert.alert("Password do not match");
       }
+
+      await createUserWithEmailAndPassword(auth, email, password);
 
       Alert.alert("Successfully Registered your account");
       setLoading(false);
@@ -59,13 +52,19 @@ const Register = () => {
     navigation.navigate("Login");
   };
 
-  console.log(date);
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registration</Text>
-      <View style={styles.input_container}>
-        <Text style={styles.input_label}>Email:</Text>
+    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>Sign Up</Text>
+        <View style={styles.registerContainer}>
+          <Text>Already have an account? </Text>
+          <Text style={styles.registerText} onPress={handleGoBackToLogin}>
+            Login
+          </Text>
+        </View>
+      </View>
+      <View style={styles.inputContainer}>
+        <MaterialCommunityIcons name="email-outline" size={24} color="black" />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -73,17 +72,9 @@ const Register = () => {
           onChangeText={setEmail}
         />
       </View>
-      <View style={styles.input_container}>
-        <Text style={styles.input_label}>Full Name:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Full Name"
-          value={name}
-          onChangeText={setName}
-        />
-      </View>
-      <View style={styles.input_container}>
-        <Text style={styles.input_label}>Password:</Text>
+
+      <View style={styles.inputContainer}>
+        <Feather name="lock" size={24} color="black" />
         <TextInput
           style={styles.input}
           placeholder="Password"
@@ -92,8 +83,8 @@ const Register = () => {
           secureTextEntry
         />
       </View>
-      <View style={styles.input_container}>
-        <Text style={styles.input_label}>Confirm Password:</Text>
+      <View style={styles.inputContainer}>
+        <Feather name="lock" size={24} color="black" />
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
@@ -102,38 +93,40 @@ const Register = () => {
           secureTextEntry
         />
       </View>
-      <View style={styles.input_container}>
-        <Text style={styles.input_label}>Birthday:</Text>
-        <TouchableOpacity style={styles.input} onPress={toggleDate}>
-          <Text>{moment(date).format("YYYY-MM-DD")}</Text>
-        </TouchableOpacity>
-      </View>
-      {showDatePicker && (
-        <DateTimePicker
-          display="spinner"
-          value={date}
-          mode="date"
-          onChange={(e) => onChangeSelectedDate(e.nativeEvent.timestamp)}
-        />
-      )}
-      <TouchableOpacity
-        style={[
-          styles.button,
-          email && name && password && confirmPassword
-            ? styles.buttonEnabled
-            : styles.buttonDisabled,
-        ]}
-        onPress={handleRegistration}
-        disabled={!email || !name || !password || !confirmPassword}
+
+      <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+        <LinearGradient
+          colors={["#FFAA21", "#FFC42C"]}
+          style={{
+            flex: 1,
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 10,
+          }}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Please wait..." : "Sign Up"}
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          width: "90%",
+          flexWrap: "wrap",
+          paddingTop: 15,
+        }}
       >
-        <Text style={styles.buttonText}>
-          {loading ? "Please wait..." : "Register"}
+        <Text>
+          By signing up, you are agreeing to our{" "}
+          <Text style={{ color: "#64BCFC" }}>Terms of Service</Text> and{" "}
+          <Text style={{ color: "#64BCFC" }}>Privacy Policy</Text>
         </Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleGoBackToLogin}>
-        <Text style={styles.buttonGoBack}>Go back to Login</Text>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -143,56 +136,55 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#D5D5D5",
+    backgroundColor: "white",
+    paddingTop: 100,
+  },
+  textContainer: {
+    alignItems: "flex-start",
+    width: "90%",
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 30,
+    fontWeight: "900",
+    color: "#4D5C7E",
   },
-  input_container: {
+  registerContainer: {
+    flexDirection: "row",
     width: "90%",
   },
-  input_label: {
-    paddingLeft: 5,
+  registerText: {
+    textDecorationLine: "underline",
+    color: "#FD9206",
+  },
+  inputContainer: {
+    width: "90%",
+    backgroundColor: "#F4F7FF",
+    height: 60,
+    paddingLeft: 15,
+    marginVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 15,
   },
   input: {
-    width: "100%",
+    width: "80%",
     height: 40,
-    borderWidth: 1,
-    borderColor: "black",
-    borderRadius: 10,
-    padding: 10,
-    paddingLeft: 13,
-    marginBottom: 10,
-    marginTop: 3,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
   },
   button: {
     width: "90%",
-    height: 40,
-    borderWidth: 1,
-    borderColor: "black",
+    height: 60,
     borderRadius: 10,
-    marginVertical: 10,
-  },
-  buttonEnabled: {
-    backgroundColor: "#E44203",
-  },
-  buttonDisabled: {
-    backgroundColor: "#ccc",
-    borderColor: "#ccc",
+    marginTop: 30,
   },
   buttonText: {
     color: "white",
     textAlign: "center",
     lineHeight: 40,
     fontSize: 16,
-  },
-  buttonGoBack: {
-    color: "black",
-    textAlign: "center",
-    lineHeight: 40,
-    fontSize: 16,
+    fontWeight: "bold",
   },
 });
