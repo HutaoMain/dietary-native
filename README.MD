@@ -12,3 +12,5 @@ colors used:
 2. FFAA21 and FFC42C - gradient orange
 3. 4D5C7E - blue
 4. 64BCFC - skyblue
+
+5. Visible user in the home page

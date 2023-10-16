@@ -3,6 +3,7 @@ import BMICalculator from "../screens/BMICalculator";
 import BMIResult from "../screens/BMIResult";
 import { HomeNavigationStackProps } from "../types/Types";
 import Home from "../screens/Home";
+import Chat from "../components/Chat";
 
 const HomeStackNavigation = () => {
   const HomeStack = createNativeStackNavigator<HomeNavigationStackProps>();
@@ -20,6 +21,7 @@ const HomeStackNavigation = () => {
         component={BMIResult}
         options={{ headerTitle: "BMI Result" }}
       />
+      <HomeStack.Screen name="Chat" component={Chat} />
     </HomeStack.Navigator>
   );
 };

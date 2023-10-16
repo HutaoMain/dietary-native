@@ -16,6 +16,7 @@ export type HomeNavigationStackProps = {
     bmiResult: number;
     bmiCategory: string;
   };
+  Chat: undefined;
 };
 
 export type HomeNavigationProps = NativeStackScreenProps<
