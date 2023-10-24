@@ -52,10 +52,12 @@ const BMICalculator = () => {
       style={{
         flex: 1,
         padding: 20,
-        backgroundColor: "#D5D5D5",
+        paddingTop: 0,
+        backgroundColor: "white",
         width: "100%",
         height: "100%",
         alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <GenderSelect
@@ -91,20 +93,18 @@ const BMICalculator = () => {
       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: "white",
+          backgroundColor: "#FD9206",
           paddingVertical: 10,
           paddingHorizontal: 20,
-          borderRadius: 5,
+          borderRadius: 10,
           marginTop: 20,
           width: "95%",
-          borderWidth: 1,
-          borderColor: "black",
         }}
         onPress={handleSubmitBmiResult}
       >
         <Text
           style={{
-            color: "black",
+            color: "white",
             fontWeight: "bold",
             fontSize: 18,
             textAlign: "center",

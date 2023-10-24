@@ -19,7 +19,7 @@ const GenderSelect = ({ onSelectGender }: Props) => {
       style={{
         flexDirection: "row",
         justifyContent: "space-around",
-        marginTop: 40,
+        marginTop: 10,
         marginBottom: 20,
         width: "100%",
         height: "20%",
@@ -37,7 +37,7 @@ const GenderSelect = ({ onSelectGender }: Props) => {
             alignItems: "center",
             justifyContent: "center",
           },
-          selectedGender === "male" && { backgroundColor: "#E44203" },
+          selectedGender === "male" && { backgroundColor: "#FD9206" },
         ]}
         onPress={() => handleGenderSelect("male")}
       >
@@ -51,7 +51,7 @@ const GenderSelect = ({ onSelectGender }: Props) => {
         />
         <Text
           style={[
-            { fontSize: 20, color: "black" },
+            { fontSize: 20, color: "gray" },
             selectedGender === "male" && { color: "white" },
           ]}
         >
@@ -70,7 +70,7 @@ const GenderSelect = ({ onSelectGender }: Props) => {
             alignItems: "center",
             justifyContent: "center",
           },
-          selectedGender === "female" && { backgroundColor: "#E44203" },
+          selectedGender === "female" && { backgroundColor: "#FD9206" },
         ]}
         onPress={() => handleGenderSelect("female")}
       >
@@ -84,7 +84,7 @@ const GenderSelect = ({ onSelectGender }: Props) => {
         />
         <Text
           style={[
-            { fontSize: 20, color: "black" },
+            { fontSize: 20, color: "gray" },
             selectedGender === "female" && { color: "white" },
           ]}
         >

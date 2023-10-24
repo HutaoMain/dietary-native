@@ -75,6 +75,9 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    backgroundColor: "white",
+
+    height: "100%",
   },
   headerContainer: {
     flexDirection: "row",
@@ -85,7 +88,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerRightContainer: {
-    backgroundColor: "yellow",
+    backgroundColor: "#FD9206",
+
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
@@ -99,10 +103,12 @@ const styles = StyleSheet.create({
   },
   month: {
     fontSize: 18,
+    color: "white",
   },
   day: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "white",
   },
   //
   buttonsContainer: {

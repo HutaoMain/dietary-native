@@ -16,13 +16,13 @@ const CounterInput = ({ label, value, onIncrement, onDecrement }: Props) => {
         borderColor: "black",
         borderRadius: 10,
         width: "45%",
-        height: 200,
+        height: 175,
         justifyContent: "space-evenly",
         alignItems: "center",
         backgroundColor: "white",
       }}
     >
-      <Text style={{ fontSize: 18, fontWeight: "bold", color: "black" }}>
+      <Text style={{ fontSize: 18, fontWeight: "bold", color: "gray" }}>
         {label}
       </Text>
       <View
@@ -30,7 +30,7 @@ const CounterInput = ({ label, value, onIncrement, onDecrement }: Props) => {
           alignItems: "center",
         }}
       >
-        <Text style={{ fontSize: 25, fontWeight: "bold", color: "black" }}>
+        <Text style={{ fontSize: 25, fontWeight: "bold", color: "#FD9206" }}>
           {value}
         </Text>
         <View

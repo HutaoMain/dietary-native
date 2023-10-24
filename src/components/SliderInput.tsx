@@ -22,7 +22,7 @@ const SliderInput = ({
   return (
     <View
       style={{
-        marginBottom: 20,
+        marginBottom: 10,
         borderWidth: 2,
         backgroundColor: "white",
         borderColor: "black",
@@ -33,28 +33,26 @@ const SliderInput = ({
         justifyContent: "center",
       }}
     >
-      <Text style={{ fontSize: 18, fontWeight: "bold", color: "black" }}>
+      <Text style={{ fontSize: 16, fontWeight: "bold", color: "gray" }}>
         {label}
       </Text>
       <Text
         style={{
           textAlign: "center",
-          fontSize: 30,
-          paddingTop: 10,
-          paddingBottom: 5,
-          color: "black",
+          fontSize: 25,
+          color: "#FD9206",
         }}
       >
         {value}
       </Text>
       <Slider
-        style={{ width: "100%", height: 40 }}
+        style={{ width: "100%", height: 20 }}
         value={value}
         minimumValue={min}
         maximumValue={max}
         step={step}
-        minimumTrackTintColor="black"
-        thumbTintColor="black"
+        minimumTrackTintColor="#FD9206"
+        thumbTintColor="#FD9206"
         onValueChange={onValueChange}
       />
     </View>

@@ -6,15 +6,18 @@ import {
   Alert,
 } from "react-native";
 import { BMINavigationProps } from "../types/Types";
-// import useAuthStore from "../zustand/AuthStore";
+import useAuthStore from "../zustand/AuthStore";
 import { useNavigation } from "@react-navigation/native";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { FIRESTORE_DB } from "../firebase/FirebaseConfig";
 
 const BMIResult = ({ route }: BMINavigationProps) => {
   const { gender, height, weight, age, bmiResult, bmiCategory } = route.params;
 
   const navigate = useNavigation<BMINavigationProps["navigation"]>();
 
-  // const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);
 
   const getBmiNotes = (bmiCategory: string) => {
     switch (bmiCategory) {
@@ -53,20 +56,21 @@ const BMIResult = ({ route }: BMINavigationProps) => {
 
   const handleSaveBmiResult = async () => {
     try {
-      // await axios.post(`${API_URL}/api/bmi/save`, {
-      //   email: user,
-      //   bmiNumber: bmiResult,
-      //   bmiString: bmiCategory,
-      //   height: height,
-      //   weight: weight,
-      //   gender: gender,
-      //   age: age,
-      //   note: bmiNotes.note,
-      // });
-      // Toast.show({
-      //   type: "success",
-      //   text1: `Successfully save BMI.`,
-      // });
+      await addDoc(collection(FIRESTORE_DB, "bmiResult"), {
+        email: user,
+        gender: gender,
+        height: height,
+        weight: weight,
+        age: age,
+        bmiResult: bmiResult,
+        bmiCategory: bmiCategory,
+        createdAt: serverTimestamp(),
+      });
+      console.log("After addDoc");
+      Toast.show({
+        type: "success",
+        text1: `Successfully Saved BMI Result`,
+      });
       setTimeout(() => {
         navigate.navigate("Home");
       }, 2000);

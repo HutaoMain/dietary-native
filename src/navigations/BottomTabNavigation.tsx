@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStackNavigation from "./HomeStackNavigation";
 import Chat from "../components/Chat";
+import Profile from "../screens/Profile";
 
 const BottomTabNavigation = () => {
   const Tab = createBottomTabNavigator();
@@ -12,10 +13,12 @@ const BottomTabNavigation = () => {
         tabBarIcon: ({ focused, size }) => {
           let iconName: any;
 
-          if (route.name === "HomeStackNavigation") {
+          if (route.name === "Home") {
             iconName = focused ? "home" : "home-outline";
-          } else if (route.name === "Chat") {
+          } else if (route.name === "AI Chat") {
             iconName = focused ? "chatbox" : "chatbox-outline";
+          } else if (route.name === "Profile") {
+            iconName = focused ? "person" : "person-outline";
           }
 
           return (
@@ -30,18 +33,22 @@ const BottomTabNavigation = () => {
           height: 60,
           backgroundColor: "white",
         },
-        tabBarShowLabel: false,
       })}
     >
       <Tab.Screen
-        name="HomeStackNavigation"
+        name="Home"
         component={HomeStackNavigation}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Chat"
+        name="AI Chat"
         component={Chat}
         options={{ headerTitle: "Chatbot" }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerTitle: "Profile" }}
       />
     </Tab.Navigator>
   );
