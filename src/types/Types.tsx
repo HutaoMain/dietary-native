@@ -6,7 +6,7 @@ export type AuthStackNavigationType = {
 };
 
 export type HomeNavigationStackProps = {
-  Home: undefined;
+  HomeScreen: undefined;
   BMICalculator: undefined;
   BMIResult: {
     gender: string;
@@ -18,11 +18,31 @@ export type HomeNavigationStackProps = {
   };
   Chat: undefined;
   Profile: undefined;
+  MealPlan: undefined;
+  MealPlanSingleScreen: {
+    _id: string;
+    name: string;
+    image: string;
+    calories: string;
+    description: string;
+    ingredients: string[];
+    mealType: string;
+    bmiRange: {
+      min: number;
+      max: number;
+    };
+    createdAt: string;
+  };
 };
 
 export type HomeNavigationProps = NativeStackScreenProps<
   HomeNavigationStackProps,
   "BMIResult"
+>;
+
+export type MealPlanNavigationProps = NativeStackScreenProps<
+  HomeNavigationStackProps,
+  "MealPlanSingleScreen"
 >;
 
 export type BMINavigationStackProps = {
@@ -42,3 +62,22 @@ export type BMINavigationProps = NativeStackScreenProps<
   BMINavigationStackProps,
   "BMIResult"
 >;
+
+//
+
+export interface IMealPlan {
+  _id: string;
+  name: string;
+  image: string;
+  calories: string;
+  description: string;
+  ingredients: string[];
+  mealType: string;
+  bmiRange: {
+    min: number;
+    max: number;
+    _id: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}

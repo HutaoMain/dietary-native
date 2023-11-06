@@ -5,6 +5,8 @@ import { HomeNavigationStackProps } from "../types/Types";
 import Home from "../screens/Home";
 import Chat from "../components/Chat";
 import Profile from "../screens/Profile";
+import MealPlan from "../screens/MealPlan";
+import MealPlanSingleScreen from "../screens/MealPlanSingleScreen";
 
 const HomeStackNavigation = () => {
   const HomeStack = createNativeStackNavigator<HomeNavigationStackProps>();
@@ -12,7 +14,7 @@ const HomeStackNavigation = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        name="Home"
+        name="HomeScreen"
         component={Home}
         options={{ headerShown: false }}
       />
@@ -24,6 +26,15 @@ const HomeStackNavigation = () => {
       />
       <HomeStack.Screen name="Chat" component={Chat} />
       <HomeStack.Screen name="Profile" component={Profile} />
+      <HomeStack.Screen
+        name="MealPlan"
+        component={MealPlan}
+        options={{ headerTitle: "Meal Plan" }}
+      />
+      <HomeStack.Screen
+        name="MealPlanSingleScreen"
+        component={MealPlanSingleScreen}
+      />
     </HomeStack.Navigator>
   );
 };
