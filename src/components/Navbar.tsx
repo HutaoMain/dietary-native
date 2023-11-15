@@ -1,9 +1,9 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
-import useAuthStore from "../zustand/AuthStore";
+import useFetchUserData from "../CurrentUser";
 
 const Navbar = () => {
-  const user = useAuthStore((state) => state.user);
+  const userData = useFetchUserData();
 
   return (
     <View
@@ -18,10 +18,12 @@ const Navbar = () => {
     >
       <View>
         <Text style={{ fontSize: 20 }}>Welcome,</Text>
-        <Text style={{ fontSize: 18, fontWeight: "bold" }}>{user}</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+          {userData?.fullName}
+        </Text>
       </View>
       <Image
-        source={require("../../assets/user-logo.png")}
+        source={{ uri: userData?.imageUrl }}
         style={{ width: 50, height: 50, borderRadius: 100 }}
       />
     </View>

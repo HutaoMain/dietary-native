@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Timestamp } from "firebase/firestore";
 
 export type AuthStackNavigationType = {
   Login: undefined;
@@ -46,7 +47,7 @@ export type MealPlanNavigationProps = NativeStackScreenProps<
 >;
 
 export type BMINavigationStackProps = {
-  Home: undefined;
+  HomeScreen: undefined;
   BMICalculator: undefined;
   BMIResult: {
     gender: string;
@@ -80,4 +81,23 @@ export interface IMealPlan {
   };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IUser {
+  dateOfBirth: Timestamp;
+  email: string;
+  fullName: string;
+  imageUrl: string;
+}
+
+export interface IBmiResult {
+  id: string;
+  age: number;
+  bmiCategory: string;
+  bmiResult: number;
+  createdAt: Timestamp;
+  email: string;
+  gender: string;
+  height: number;
+  weight: number;
 }

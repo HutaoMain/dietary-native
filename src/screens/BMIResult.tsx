@@ -8,14 +8,24 @@ import {
 import { BMINavigationProps } from "../types/Types";
 import useAuthStore from "../zustand/AuthStore";
 import { useNavigation } from "@react-navigation/native";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { FIRESTORE_DB } from "../firebase/FirebaseConfig";
+import useFetchCurrentBmiData from "../CurrentBmiResult";
 
 const BMIResult = ({ route }: BMINavigationProps) => {
   const { gender, height, weight, age, bmiResult, bmiCategory } = route.params;
 
   const navigate = useNavigation<BMINavigationProps["navigation"]>();
+
+  const bmiResultData = useFetchCurrentBmiData();
+
+  console.log("id", bmiResultData?.id);
 
   const user = useAuthStore((state) => state.user);
 
@@ -56,26 +66,36 @@ const BMIResult = ({ route }: BMINavigationProps) => {
 
   const handleSaveBmiResult = async () => {
     try {
-      await addDoc(collection(FIRESTORE_DB, "bmiResult"), {
-        email: user,
-        gender: gender,
-        height: height,
-        weight: weight,
-        age: age,
-        bmiResult: bmiResult,
-        bmiCategory: bmiCategory,
-        createdAt: serverTimestamp(),
-      });
-      console.log("After addDoc");
-      Toast.show({
-        type: "success",
-        text1: `Successfully Saved BMI Result`,
-      });
-      setTimeout(() => {
-        navigate.navigate("Home");
-      }, 2000);
+      if (bmiResultData) {
+        // Update existing record
+        const bmiDocRef = doc(FIRESTORE_DB, "bmiResult", bmiResultData.id);
+        await updateDoc(bmiDocRef, {
+          gender: gender,
+          height: height,
+          weight: weight,
+          age: age,
+          bmiResult: bmiResult,
+          bmiCategory: bmiCategory,
+          createdAt: serverTimestamp(),
+        });
+      } else {
+        // Add new record
+        await addDoc(collection(FIRESTORE_DB, "bmiResult"), {
+          email: user,
+          gender: gender,
+          height: height,
+          weight: weight,
+          age: age,
+          bmiResult: bmiResult,
+          bmiCategory: bmiCategory,
+          createdAt: serverTimestamp(),
+        });
+      }
+
+      Alert.alert("Successfully Save BMI");
+      navigate.navigate("HomeScreen");
     } catch (error) {
-      console.log;
+      console.error("Error saving BMI result:", error);
     }
   };
 
@@ -196,14 +216,12 @@ const BMIResult = ({ route }: BMINavigationProps) => {
       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: "white",
+          backgroundColor: "#FD9206",
           paddingVertical: 10,
-          paddingHorizontal: 20,
-          borderRadius: 5,
+          paddingHorizontal: 30,
+          borderRadius: 10,
           marginTop: 20,
           width: "90%",
-          borderWidth: 1,
-          borderColor: "black",
           position: "absolute",
           bottom: 20,
         }}
@@ -211,7 +229,7 @@ const BMIResult = ({ route }: BMINavigationProps) => {
       >
         <Text
           style={{
-            color: "black",
+            color: "white",
             fontWeight: "bold",
             fontSize: 18,
             textAlign: "center",

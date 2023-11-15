@@ -18,7 +18,11 @@ const HomeStackNavigation = () => {
         component={Home}
         options={{ headerShown: false }}
       />
-      <HomeStack.Screen name="BMICalculator" component={BMICalculator} />
+      <HomeStack.Screen
+        name="BMICalculator"
+        component={BMICalculator}
+        options={{ headerTitle: "BMI Calculator" }}
+      />
       <HomeStack.Screen
         name="BMIResult"
         component={BMIResult}

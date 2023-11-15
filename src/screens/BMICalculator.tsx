@@ -6,6 +6,7 @@ import CounterInput from "../components/CounterInput";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { BMINavigationProps } from "../types/Types";
+import useFetchCurrentBmiData from "../CurrentBmiResult";
 
 const BMICalculator = () => {
   const [gender, setGender] = useState<string>("");
@@ -16,14 +17,24 @@ const BMICalculator = () => {
 
   const navigate = useNavigation<BMINavigationProps["navigation"]>();
 
+  const bmiResultData = useFetchCurrentBmiData();
+
+  useEffect(() => {
+    setGender(bmiResultData?.gender || "");
+    setHeight(bmiResultData?.height || 160);
+    setWeight(bmiResultData?.weight || 160);
+    setAge(bmiResultData?.age || 25);
+    setBMIResult(bmiResultData?.bmiResult || 0);
+
+    console.log("sample");
+  }, [bmiResultData]);
+
   useEffect(() => {
     const heightInMeters = height / 100;
     const bmi = weight / (heightInMeters * heightInMeters);
     const finalBmi = Math.round(bmi * 1e2) / 1e2;
     setBMIResult(finalBmi);
   });
-
-  console.log(bmiResult);
 
   const handleSubmitBmiResult = () => {
     let bmiCategory = "";
@@ -47,6 +58,8 @@ const BMICalculator = () => {
     });
   };
 
+  const disabled = gender === "";
+
   return (
     <SafeAreaView
       style={{
@@ -62,6 +75,7 @@ const BMICalculator = () => {
     >
       <GenderSelect
         onSelectGender={(selectedGender: string) => setGender(selectedGender)}
+        gender={gender}
       />
       <SliderInput
         label="Height (cm)"
@@ -93,7 +107,7 @@ const BMICalculator = () => {
       </View>
       <TouchableOpacity
         style={{
-          backgroundColor: "#FD9206",
+          backgroundColor: disabled ? "#dddddd" : "#FD9206",
           paddingVertical: 10,
           paddingHorizontal: 20,
           borderRadius: 10,

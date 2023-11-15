@@ -1,50 +1,120 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import useFetchUserData from "../CurrentUser";
+import moment from "moment";
+import useFetchCurrentBmiData from "../CurrentBmiResult";
+import { FIREBASE_AUTH } from "../firebase/FirebaseConfig";
+import useAuthStore from "../zustand/AuthStore";
+import { signOut } from "firebase/auth";
 
 const Profile = () => {
+  const userData = useFetchUserData();
+
+  const bmiResult = useFetchCurrentBmiData();
+
+  const auth = FIREBASE_AUTH;
+  const clearUser = useAuthStore((state) => state.clearUser);
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        Alert.alert("Successfully logout!");
+        clearUser();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.coverPhotoContainer}>
-        <Image
-          source={require("../../assets/user-logo.png")}
-          style={styles.coverPhoto}
-        />
-        <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>Edit</Text>
-        </TouchableOpacity>
-        <Text style={styles.profileName}>John Doe</Text>
-        <Text style={styles.profileEmail}>john.doe@example.com</Text>
+        <Image source={{ uri: userData?.imageUrl }} style={styles.coverPhoto} />
+        <Text style={styles.profileName}>{userData?.fullName}</Text>
+        <Text style={styles.profileEmail}>{userData?.email}</Text>
       </View>
       <View style={styles.infoContainer}>
         <View style={styles.infoRow}>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Age</Text>
-            <Text style={styles.infoValue}>28</Text>
+            <Text style={styles.infoValue}>
+              {bmiResult?.age ? bmiResult.age : "Please go to BMI Calculator"}
+            </Text>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Weight</Text>
-            <Text style={styles.infoValue}>70 kg</Text>
+            <Text style={styles.infoValue}>
+              {bmiResult?.weight
+                ? bmiResult?.weight + "kg"
+                : "Please go to BMI Calculator"}
+            </Text>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Height</Text>
-            <Text style={styles.infoValue}>175 cm</Text>
+            <Text style={styles.infoValue}>
+              {bmiResult?.height
+                ? bmiResult.height + "cm"
+                : "Please go to BMI Calculator"}
+            </Text>
           </View>
         </View>
         <View style={styles.infoRow}>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Birthday</Text>
-            <Text style={styles.infoValue}>Jan 1, 1995</Text>
+            <Text style={styles.infoValue}>
+              {moment(userData?.dateOfBirth.toDate()).format("YYYY-MM-DD")}
+            </Text>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>BMI</Text>
-            <Text style={styles.infoValue}>24.5</Text>
+            <Text style={styles.infoValue}>
+              {bmiResult?.bmiResult
+                ? bmiResult.bmiResult
+                : "Please go to BMI Calculator"}
+            </Text>
+            <Text>
+              {bmiResult?.bmiCategory
+                ? bmiResult.bmiCategory
+                : "Please go to BMI Calculator"}
+            </Text>
           </View>
           <View style={styles.infoColumn}>
             <Text style={styles.infoLabel}>Gender</Text>
-            <Text style={styles.infoValue}>Male</Text>
+            <Text style={[styles.infoValue, { textTransform: "capitalize" }]}>
+              {bmiResult?.gender
+                ? bmiResult.gender
+                : "Please go to BMI Calculator"}
+            </Text>
           </View>
         </View>
       </View>
+      <TouchableOpacity
+        onPress={handleLogout}
+        style={{
+          backgroundColor: "#FD9206",
+          paddingVertical: 10,
+          borderRadius: 10,
+          marginTop: 30,
+          width: "100%",
+        }}
+      >
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 18,
+            textAlign: "center",
+          }}
+        >
+          Logout
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -52,14 +122,20 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    paddingHorizontal: 20,
   },
   coverPhotoContainer: {
     alignItems: "center",
   },
   coverPhoto: {
-    width: "100%",
+    width: 200,
     height: 200,
     objectFit: "contain",
+    borderRadius: 100,
+    marginTop: 10,
   },
   editButton: {
     position: "absolute",
@@ -73,6 +149,7 @@ const styles = StyleSheet.create({
     color: "white",
   },
   profileName: {
+    marginTop: 20,
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 10,
@@ -82,8 +159,8 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   infoContainer: {
-    paddingHorizontal: 20,
-    marginTop: 20,
+    marginTop: 30,
+    width: "100%",
   },
   infoRow: {
     flexDirection: "row",

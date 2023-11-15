@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 interface Props {
   onSelectGender: (gender: string) => void;
+  gender: string;
 }
 
-const GenderSelect = ({ onSelectGender }: Props) => {
+const GenderSelect = ({ onSelectGender, gender }: Props) => {
   const [selectedGender, setSelectedGender] = useState<string>("");
+
+  console.log(gender);
+
+  useEffect(() => {
+    setSelectedGender(gender);
+  }, [gender]);
 
   const handleGenderSelect = (gender: string) => {
     setSelectedGender(gender);

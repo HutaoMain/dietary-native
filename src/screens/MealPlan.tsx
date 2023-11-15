@@ -1,41 +1,34 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
-// { useEffect, useState }
-// import axios from "axios";
-// import { API_URL } from "../EnvironmentVariables";
 import { IMealPlan } from "../types/Types";
 import MealPlanCard from "../components/MealPlanCard";
 import { mealPlanData } from "../MealPlanData";
+import useFetchCurrentBmiData from "../CurrentBmiResult";
 
 const MealPlan = () => {
-  //   const [mealPlanList, setMealPlanList] = useState<IMealPlan[]>();
-
-  //   useEffect(() => {
-  //     const fetch = async () => {
-  //       try {
-  //         const res = await axios.get(`${API_URL}/api/food`);
-
-  //         setMealPlanList(res.data);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //     fetch();
-  //   }, []);
-
   type GroupedDays = { [day: number]: IMealPlan[] };
 
-  // Function to group meal plans by day
+  const bmiResultData = useFetchCurrentBmiData();
+
   const groupMealPlansByDay = () => {
     const groupedDays: GroupedDays = {};
 
-    // Group meal plans into days (you can adjust the logic as per your data)
     mealPlanData?.forEach((mealPlan, index) => {
-      const dayOfWeek = index % 7; // Assuming there are 7 days in a week
+      const dayOfWeek = index % 7;
       if (!groupedDays[dayOfWeek]) {
         groupedDays[dayOfWeek] = [];
       }
-      groupedDays[dayOfWeek].push(mealPlan);
+
+      // Check if bmiResult is within the range for the current meal plan
+      const isInBmiRange =
+        bmiResultData &&
+        bmiResultData.bmiResult >= mealPlan.bmiRange.min &&
+        bmiResultData.bmiResult <= mealPlan.bmiRange.max;
+
+      // If it's in range or bmiResultData is not available, include the meal plan
+      if (isInBmiRange || !bmiResultData) {
+        groupedDays[dayOfWeek].push(mealPlan);
+      }
     });
 
     return groupedDays;
@@ -73,7 +66,6 @@ const MealPlan = () => {
 
 export default MealPlan;
 
-// Helper function to get the day name from day number (0-6)
 const getDayName = (day: number) => {
   const days = [
     "Sunday",

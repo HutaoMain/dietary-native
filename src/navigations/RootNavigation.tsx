@@ -9,7 +9,7 @@ const RootNavigation = () => {
   const user = useAuthStore((state) => state.user);
   return (
     <NavigationContainer>
-      {!user ? <BottomTabNavigation /> : <AuthStackNavigation />}
+      {user ? <BottomTabNavigation /> : <AuthStackNavigation />}
     </NavigationContainer>
   );
 };
