@@ -14,3 +14,5 @@ colors used:
 4. 64BCFC - skyblue
 
 5. Visible user in the home page
+
+additional in app.json // additional extra and package

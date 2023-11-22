@@ -1095,4 +1095,158 @@ export const mealPlanData: IMealPlan[] = [
     createdAt: "2023-11-05T16:35:53.918Z",
     updatedAt: "2023-11-05T16:35:53.918Z",
   },
+  {
+    _id: "unique_id_26",
+    name: "Grilled Chicken Salad with Avocado",
+    image:
+      "https://www.primaverakitchen.com/wp-content/uploads/2018/04/Grilled-Chicken-Avocado-Salad-Primavera-Kitchen-1-scaled.jpg",
+    calories: "400",
+    description:
+      "A hearty salad with grilled chicken, mixed greens, cherry tomatoes, and avocado.",
+    ingredients: [
+      "Grilled Chicken",
+      "Mixed Greens",
+      "Cherry Tomatoes",
+      "Avocado",
+      "Balsamic Vinaigrette",
+    ],
+    mealType: "lunch",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_27",
+    name: "Vegetable and Quinoa Stuffed Peppers",
+    image:
+      "https://www.foodnetwork.com/content/dam/images/food/fullset/2013/1/17/1/WR0503H_quinoa-and-vegetable-stuffed-peppers-recipe_s4x3.jpg",
+    calories: "350",
+    description:
+      "Colorful bell peppers stuffed with a flavorful mixture of quinoa and assorted vegetables.",
+    ingredients: ["Quinoa", "Bell Peppers", "Zucchini", "Tomatoes", "Cheese"],
+    mealType: "dinner",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_28",
+    name: "Banana Walnut Overnight Oats",
+    image:
+      "https://www.thehealthymaven.com/wp-content/uploads/2018/03/Banana-Nut-Overnight-Oats-4.jpg",
+    calories: "380",
+    description:
+      "A nutritious and filling breakfast featuring oats, bananas, walnuts, and almond milk.",
+    ingredients: ["Oats", "Bananas", "Walnuts", "Almond Milk", "Maple Syrup"],
+    mealType: "breakfast",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_29",
+    name: "Salmon and Quinoa Bowl",
+    image:
+      "https://www.onceuponachef.com/images/2021/05/Quinoa-Roasted-Salmon-Bowl-with-Avocado.-Cucumber-and-Green-Goddess-Dressing-scaled.jpg",
+    calories: "450",
+    description:
+      "A protein-packed bowl with grilled salmon, quinoa, steamed broccoli, and a lemon-tahini dressing.",
+    ingredients: ["Salmon Fillet", "Quinoa", "Broccoli", "Lemon", "Tahini"],
+    mealType: "dinner",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_30",
+    name: "Mixed Berry Smoothie Bowl",
+    image:
+      "https://cdn.nutritioninthekitch.com/wp-content/uploads/2019/07/IMG_8648.jpg",
+    calories: "300",
+    description:
+      "A refreshing smoothie bowl featuring mixed berries, Greek yogurt, and granola.",
+    ingredients: ["Mixed Berries", "Greek Yogurt", "Granola", "Honey"],
+    mealType: "snack",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+
+  {
+    _id: "unique_id_31",
+    name: "Spicy Chickpea and Spinach Curry",
+    image:
+      "https://mygoodnesskitchen.com/wp-content/uploads/2022/02/Chickpea-and-Spinach-Curry-Hero-1061.jpg",
+    calories: "380",
+    description:
+      "A flavorful curry with chickpeas, spinach, tomatoes, and aromatic spices.",
+    ingredients: ["Chickpeas", "Spinach", "Tomatoes", "Onions", "Spices"],
+    mealType: "dinner",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_32",
+    name: "Mango Avocado Salsa Chicken",
+    image:
+      "https://healthyfitnessmeals.com/wp-content/uploads/2018/04/grilled-chicken-with-mango-avocado-salsa-3-SQUARE.jpg",
+    calories: "420",
+    description:
+      "Grilled chicken topped with a refreshing salsa made with mango, avocado, and cilantro.",
+    ingredients: ["Chicken Breast", "Mango", "Avocado", "Cilantro", "Lime"],
+    mealType: "lunch",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  //
+  {
+    _id: "unique_id_33",
+    name: "Quinoa and Black Bean Bowl",
+    image:
+      "https://www.eatingwell.com/thmb/CLV0ZHU_NMcm-OigfRbs_9ACLEs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4565089-13d53eaaf57f47869c5fe402a9b3e492.jpg",
+    calories: "360",
+    description:
+      "A nutrient-rich bowl with quinoa, black beans, corn, and a zesty lime dressing.",
+    ingredients: ["Quinoa", "Black Beans", "Corn", "Red Onion", "Lime"],
+    mealType: "lunch",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_34",
+    name: "Sweet Potato and Kale Salad",
+    image:
+      "https://www.howsweeteats.com/wp-content/uploads/2021/10/sweet-potato-kale-salad-10.jpg",
+    calories: "350",
+    description:
+      "A colorful salad featuring roasted sweet potatoes, kale, pecans, and a honey-mustard dressing.",
+    ingredients: ["Sweet Potatoes", "Kale", "Pecans", "Dijon Mustard", "Honey"],
+    mealType: "dinner",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
+  {
+    _id: "unique_id_35",
+    name: "Blueberry Almond Chia Pudding",
+    image:
+      "https://www.eatingwell.com/thmb/a6-OSevbgc1wp-Kpe4IL_k0U5V4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/4524458-9f451f5261ae4ee5b3551d5d53e533e5.jpg",
+    calories: "320",
+    description:
+      "A delicious chia pudding made with almond milk, blueberries, and sliced almonds.",
+    ingredients: [
+      "Chia Seeds",
+      "Almond Milk",
+      "Blueberries",
+      "Maple Syrup",
+      "Almonds",
+    ],
+    mealType: "breakfast",
+    bmiRange: { min: 30, max: 39.9, _id: "sample" },
+    createdAt: "2023-11-05T16:35:53.918Z",
+    updatedAt: "2023-11-05T16:35:53.918Z",
+  },
 ];
