@@ -16,3 +16,6 @@ colors used:
 5. Visible user in the home page
 
 additional in app.json // additional extra and package
+
+allergies is not saving
+need to filter the mealplandata base on allergies and bmi

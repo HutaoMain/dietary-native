@@ -145,6 +145,7 @@ const Register = () => {
           <RegisterAllergySelection
             handleRegistration={handleRegistration}
             loading={loading}
+            userEmail={email}
           />
         );
 

@@ -10,6 +10,7 @@ import updateUserAllergies from "../CurrentAllergies";
 interface Props {
   handleRegistration: () => void;
   loading: boolean;
+  userEmail: string;
 }
 
 const allergens: string[] = [
@@ -24,22 +25,28 @@ const allergens: string[] = [
   "Sesame",
 ];
 
-const RegisterAllergySelection = ({ handleRegistration, loading }: Props) => {
+const RegisterAllergySelection = ({
+  userEmail,
+  handleRegistration,
+  loading,
+}: Props) => {
   const [selectedAllergies, setSelectedAllergies] = useState<string[]>([]);
 
-  const user = useAuthStore((state) => state.user);
+  let updatedAllergies: string[] = [];
 
   const toggleAllergy = async (allergen: string) => {
     // Update local state
-    const updatedAllergies = selectedAllergies.includes(allergen)
+    updatedAllergies = selectedAllergies.includes(allergen)
       ? selectedAllergies.filter((a) => a !== allergen)
       : [...selectedAllergies, allergen];
     setSelectedAllergies(updatedAllergies);
+  };
 
+  const handleSubmit = async () => {
     // Update Firebase
     try {
       handleRegistration();
-      await updateUserAllergies(user || "", updatedAllergies);
+      await updateUserAllergies(userEmail, updatedAllergies);
     } catch (error) {
       console.error("Error updating user allergies:", error);
     }
@@ -78,7 +85,7 @@ const RegisterAllergySelection = ({ handleRegistration, loading }: Props) => {
             // disabled ? styles.disabledButton :
             styles.button
           }
-          onPress={handleRegistration}
+          onPress={handleSubmit}
           // disabled={disabled}
         >
           <LinearGradient
