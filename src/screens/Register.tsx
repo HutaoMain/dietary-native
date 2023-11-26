@@ -2,69 +2,43 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
   Alert,
   KeyboardAvoidingView,
-  Image,
+  ScrollView,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AuthStackNavigationType } from "../types/Types";
 import { LinearGradient } from "expo-linear-gradient";
-import { Feather, MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../firebase/FirebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import moment from "moment";
-import * as ImagePicker from "expo-image-picker";
+import RegisterAccountInfo from "../components/RegisterAccountInfo";
+import RegisterPersonalInfo from "../components/RegisterPersonalInfo";
+import RegisterAllergySelection from "../components/RegisterAllergySelection";
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-
+  const [name, setName] = useState<string>("");
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
-
   const [imageBase64, setImageBase64] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string>("");
+  const [step, setStep] = useState<number>(1);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      base64: true,
-    });
-
-    if (!result.canceled) {
-      let base64Img = `data:image/jpg;base64,${result.assets?.[0].base64}`;
-      setImageBase64(base64Img);
-    }
+  const nextStep = () => {
+    setStep(step + 1);
   };
 
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate;
-    setDateOfBirth(currentDate);
-  };
-
-  const showMode = (currentMode: any) => {
-    DateTimePickerAndroid.open({
-      value: dateOfBirth,
-      onChange,
-      mode: currentMode,
-      is24Hour: true,
-    });
-  };
-
-  const showDatepicker = () => {
-    showMode("date");
+  const prevStep = () => {
+    setStep(step - 1);
   };
 
   const navigation =
@@ -73,30 +47,6 @@ const Register = () => {
   const auth = FIREBASE_AUTH;
 
   const usersCollectionRef = collection(FIRESTORE_DB, "users");
-
-  useEffect(() => {
-    if (imageBase64) {
-      let data = {
-        file: imageBase64,
-        upload_preset: "upload",
-      };
-
-      fetch("https://api.cloudinary.com/v1_1/alialcantara/image/upload", {
-        body: JSON.stringify(data),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      })
-        .then(async (r) => {
-          let data = await r.json();
-          console.log(data.secure_url);
-          setImageUrl(data.secure_url);
-          return data.secure_url;
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [imageBase64]);
 
   const handleRegistration = async () => {
     setLoading(true);
@@ -134,148 +84,161 @@ const Register = () => {
     }
   };
 
+  useEffect(() => {
+    if (imageBase64) {
+      let data = {
+        file: imageBase64,
+        upload_preset: "upload",
+      };
+
+      fetch("https://api.cloudinary.com/v1_1/alialcantara/image/upload", {
+        body: JSON.stringify(data),
+        headers: {
+          "content-type": "application/json",
+        },
+        method: "POST",
+      })
+        .then(async (r) => {
+          let data = await r.json();
+          console.log(data.secure_url);
+          setImageUrl(data.secure_url);
+          return data.secure_url;
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [imageBase64]);
+
   const handleGoBackToLogin = () => {
     navigation.navigate("Login");
   };
 
-  const disabled = !imageUrl && !email && !name && !password;
+  // const disabled = !imageUrl && !email && !name && !password;
+
+  const disableAccountInfoNext = !email || !confirmPassword || !password;
+  const disablePersonalInfoNext = !name || !imageUrl;
+  const disabled =
+    (step === 1 && disablePersonalInfoNext) ||
+    (step === 2 && disableAccountInfoNext);
+
+  const renderForm = () => {
+    switch (step) {
+      case 1:
+        return (
+          <RegisterPersonalInfo
+            setName={setName}
+            dateOfBirth={dateOfBirth}
+            setDateOfBirth={setDateOfBirth}
+            setImageBase64={setImageBase64}
+            imageUrl={imageUrl}
+          />
+        );
+      case 2:
+        return (
+          <RegisterAccountInfo
+            setEmail={setEmail}
+            setPassword={setPassword}
+            setConfirmPassword={setConfirmPassword}
+          />
+        );
+      case 3:
+        return (
+          <RegisterAllergySelection
+            handleRegistration={handleRegistration}
+            loading={loading}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>Sign Up</Text>
-        <View style={styles.registerContainer}>
-          <Text>Already have an account? </Text>
-          <Text style={styles.registerText} onPress={handleGoBackToLogin}>
-            Login
-          </Text>
+    <ScrollView
+      contentContainerStyle={styles.scrollContainer}
+      keyboardShouldPersistTaps="handled"
+    >
+      <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>Sign Up</Text>
+          <View style={styles.registerContainer}>
+            <Text>Already have an account? </Text>
+            <Text style={styles.registerText} onPress={handleGoBackToLogin}>
+              Login
+            </Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.inputContainer}>
-        <MaterialCommunityIcons name="email-outline" size={24} color="black" />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        />
-      </View>
 
-      <View style={styles.inputContainer}>
-        <MaterialCommunityIcons name="email-outline" size={24} color="black" />
-        <TextInput
-          style={styles.input}
-          placeholder="Full name"
-          value={name}
-          onChangeText={setName}
-        />
-      </View>
+        {renderForm()}
 
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          backgroundColor: "transparent",
-        }}
-      >
-        <View style={{ width: "100%", paddingHorizontal: 22 }}>
-          <Text style={{ textAlign: "left" }}>Date of Birth</Text>
+        <View style={styles.nextBackContainer}>
+          {step !== 3 && (
+            <TouchableOpacity
+              style={disabled ? styles.disabledButton : styles.button}
+              onPress={nextStep}
+            >
+              <LinearGradient
+                colors={
+                  disabled ? ["#dddddd", "#dddddd"] : ["#FFAA21", "#FFC42C"]
+                }
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                }}
+              >
+                <Text style={styles.buttonText}>
+                  {loading ? "Please wait..." : "Next"}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+
+          {step !== 1 && (
+            <TouchableOpacity
+              style={styles.button}
+              onPress={prevStep}
+              disabled={disabled}
+            >
+              <LinearGradient
+                colors={["#4D5C7E", "#7083A1"]}
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 10,
+                }}
+              >
+                <Text style={styles.buttonText}>Back</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
         </View>
-        <TouchableOpacity
-          onPress={showDatepicker}
-          style={styles.inputContainer}
-        >
-          <Fontisto name="date" size={24} color="black" />
-          <Text style={styles.input}>
-            {moment(dateOfBirth).format("YYYY-MM-DD")}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.inputContainer}>
-        <Feather name="lock" size={24} color="black" />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Feather name="lock" size={24} color="black" />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-        />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <TouchableOpacity onPress={pickImage}>
-          <Text>
-            {imageUrl
-              ? "Image picked successfully"
-              : "Pick an image from camera roll"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity
-        style={disabled ? styles.disabledButton : styles.button}
-        onPress={handleRegistration}
-        disabled={disabled}
-      >
-        <LinearGradient
-          colors={disabled ? ["#dddddd", "#dddddd"] : ["#FFAA21", "#FFC42C"]}
-          style={{
-            flex: 1,
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 10,
-          }}
-        >
-          <Text style={styles.buttonText}>
-            {loading ? "Please wait..." : "Sign Up"}
-          </Text>
-        </LinearGradient>
-      </TouchableOpacity>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          width: "90%",
-          flexWrap: "wrap",
-          paddingTop: 15,
-        }}
-      >
-        <Text>
-          By signing up, you are agreeing to our{" "}
-          <Text style={{ color: "#64BCFC" }}>Terms of Service</Text> and{" "}
-          <Text style={{ color: "#64BCFC" }}>Privacy Policy</Text>
-        </Text>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 export default Register;
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "space-between",
+  },
   container: {
     flex: 1,
     alignItems: "center",
     backgroundColor: "white",
-    paddingTop: 10,
+    paddingTop: 50,
   },
   textContainer: {
     alignItems: "flex-start",
     width: "90%",
-    marginBottom: 10,
+    marginBottom: 40,
   },
   title: {
     fontSize: 30,
@@ -326,5 +289,11 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     fontSize: 16,
     fontWeight: "bold",
+  },
+  nextBackContainer: {
+    width: "100%",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 40,
   },
 });

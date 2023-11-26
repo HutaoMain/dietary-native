@@ -79,6 +79,7 @@ export interface IMealPlan {
     max: number;
     _id: string;
   };
+  allergies: string[];
   createdAt: string;
   updatedAt: string;
 }

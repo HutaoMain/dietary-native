@@ -4,6 +4,7 @@ import { IMealPlan } from "../types/Types";
 import MealPlanCard from "../components/MealPlanCard";
 import { mealPlanData } from "../MealPlanData";
 import useFetchCurrentBmiData from "../CurrentBmiResult";
+import RegisterAllergySelection from "../components/RegisterAllergySelection";
 
 const MealPlan = () => {
   type GroupedDays = { [day: number]: IMealPlan[] };
@@ -19,13 +20,11 @@ const MealPlan = () => {
         groupedDays[dayOfWeek] = [];
       }
 
-      // Check if bmiResult is within the range for the current meal plan
       const isInBmiRange =
         bmiResultData &&
         bmiResultData.bmiResult >= mealPlan.bmiRange.min &&
         bmiResultData.bmiResult <= mealPlan.bmiRange.max;
 
-      // If it's in range or bmiResultData is not available, include the meal plan
       if (isInBmiRange || !bmiResultData) {
         groupedDays[dayOfWeek].push(mealPlan);
       }
@@ -44,6 +43,7 @@ const MealPlan = () => {
 
   return (
     <View>
+      <RegisterAllergySelection />
       <ScrollView>
         {Object.keys(daysWithMealPlans).map((day, index) => (
           <TouchableOpacity
