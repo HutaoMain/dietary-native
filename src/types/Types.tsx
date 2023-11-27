@@ -102,3 +102,8 @@ export interface IBmiResult {
   height: number;
   weight: number;
 }
+
+export interface IUserAllergies {
+  email: string;
+  allergies: string[];
+}

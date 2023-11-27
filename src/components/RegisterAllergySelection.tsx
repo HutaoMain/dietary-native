@@ -1,11 +1,8 @@
-// AllergySelection.js
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import "firebase/firestore";
-
-import useAuthStore from "../zustand/AuthStore";
 import { LinearGradient } from "expo-linear-gradient";
-import updateUserAllergies from "../CurrentAllergies";
+import updateUserAllergies from "../UpdateUserAllergies";
 
 interface Props {
   handleRegistration: () => void;
@@ -31,26 +28,26 @@ const RegisterAllergySelection = ({
   loading,
 }: Props) => {
   const [selectedAllergies, setSelectedAllergies] = useState<string[]>([]);
+  const updatedAllergiesRef = useRef<string[]>([]);
 
-  let updatedAllergies: string[] = [];
-
-  const toggleAllergy = async (allergen: string) => {
-    // Update local state
-    updatedAllergies = selectedAllergies.includes(allergen)
+  const toggleAllergy = (allergen: string) => {
+    const updatedAllergies = selectedAllergies.includes(allergen)
       ? selectedAllergies.filter((a) => a !== allergen)
       : [...selectedAllergies, allergen];
     setSelectedAllergies(updatedAllergies);
+    updatedAllergiesRef.current = updatedAllergies; // Update the ref
   };
 
   const handleSubmit = async () => {
-    // Update Firebase
     try {
       handleRegistration();
-      await updateUserAllergies(userEmail, updatedAllergies);
+      await updateUserAllergies(userEmail, updatedAllergiesRef.current);
     } catch (error) {
       console.error("Error updating user allergies:", error);
     }
   };
+
+  console.log(updatedAllergiesRef);
 
   return (
     <>
@@ -80,19 +77,9 @@ const RegisterAllergySelection = ({
           width: "100%",
         }}
       >
-        <TouchableOpacity
-          style={
-            // disabled ? styles.disabledButton :
-            styles.button
-          }
-          onPress={handleSubmit}
-          // disabled={disabled}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <LinearGradient
-            colors={
-              //   disabled ? ["#dddddd", "#dddddd"] :
-              ["#FFAA21", "#FFC42C"]
-            }
+            colors={["#FFAA21", "#FFC42C"]}
             style={{
               flex: 1,
               width: "100%",

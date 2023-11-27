@@ -1,15 +1,18 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
-import { IMealPlan } from "../types/Types";
 import MealPlanCard from "../components/MealPlanCard";
 import { mealPlanData } from "../MealPlanData";
 import useFetchCurrentBmiData from "../CurrentBmiResult";
-import RegisterAllergySelection from "../components/RegisterAllergySelection";
+import { IMealPlan } from "../types/Types";
+import useFetchUserAllergies from "../CurrentUserAllergies";
 
 const MealPlan = () => {
   type GroupedDays = { [day: number]: IMealPlan[] };
 
   const bmiResultData = useFetchCurrentBmiData();
+  const currentAllergiers = useFetchUserAllergies();
+
+  console.log(currentAllergiers);
 
   const groupMealPlansByDay = () => {
     const groupedDays: GroupedDays = {};
@@ -25,7 +28,11 @@ const MealPlan = () => {
         bmiResultData.bmiResult >= mealPlan.bmiRange.min &&
         bmiResultData.bmiResult <= mealPlan.bmiRange.max;
 
-      if (isInBmiRange || !bmiResultData) {
+      const containsAllergy = mealPlan.allergies.some((allergy) =>
+        currentAllergiers?.allergies.includes(allergy)
+      );
+
+      if ((isInBmiRange || !bmiResultData) && !containsAllergy) {
         groupedDays[dayOfWeek].push(mealPlan);
       }
     });
@@ -35,15 +42,8 @@ const MealPlan = () => {
 
   const daysWithMealPlans = groupMealPlansByDay();
 
-  console.log(
-    mealPlanData?.map((item) => {
-      item.name, console.log(item.name);
-    })
-  );
-
   return (
     <View>
-      <RegisterAllergySelection />
       <ScrollView>
         {Object.keys(daysWithMealPlans).map((day, index) => (
           <TouchableOpacity
@@ -64,8 +64,6 @@ const MealPlan = () => {
   );
 };
 
-export default MealPlan;
-
 const getDayName = (day: number) => {
   const days = [
     "Sunday",
@@ -78,3 +76,5 @@ const getDayName = (day: number) => {
   ];
   return days[day];
 };
+
+export default MealPlan;
